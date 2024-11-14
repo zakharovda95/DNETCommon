@@ -3,8 +3,14 @@ using System.Reflection;
 
 namespace DNETCommon.Extensions;
 
+/// <summary>
+/// Методы расширения Enum
+/// </summary>
 public static class EnumExtension
 {
+    /// <summary>
+    /// Display(Name="...")
+    /// </summary>
     public static string GetName(this Enum value)
     {
         string result = string.Empty;
@@ -18,6 +24,9 @@ public static class EnumExtension
         return result;
     }
     
+    /// <summary>
+    /// Display(Description="...")
+    /// </summary>
     public static string GetDescription(this Enum value)
     {
         string result = string.Empty;
