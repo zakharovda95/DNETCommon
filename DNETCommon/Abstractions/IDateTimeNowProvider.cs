@@ -5,7 +5,7 @@ namespace DNETCommon.Abstractions;
 /// <summary>
 /// Предоставляет доступ к текущим дате и времени
 /// </summary>
-public interface ITimeNowProvider
+public interface IDateTimeNowProvider
 {
     /// <summary>
     /// Текущее дата и время в локальном формате

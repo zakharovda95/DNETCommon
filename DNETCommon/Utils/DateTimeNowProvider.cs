@@ -3,7 +3,7 @@ using DNETCommon.Infrastructure.Enums;
 
 namespace DNETCommon.Utils;
 
-public class TimeNowProvider : ITimeNowProvider
+public class DateTimeNowProvider : IDateTimeNowProvider
 {
     public DateTime Now => DateTime.Now;
     public DateTime NowUtc => DateTime.UtcNow;
