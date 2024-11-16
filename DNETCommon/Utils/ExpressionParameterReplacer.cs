@@ -22,7 +22,23 @@ public class ExpressionParameterReplacer : ExpressionVisitor
     protected override Expression VisitParameter(ParameterExpression node)
     {
         ArgumentNullException.ThrowIfNull(node, nameof(node));
-
         return node == _oldParameter ? _newParameter : base.VisitParameter(node);
     }
+
+    protected override Expression VisitMember(MemberExpression node)
+    {
+        if (node.Expression == _oldParameter)
+        {
+            var targetProperty = _newParameter.Type.GetProperty(node.Member.Name);
+            if (targetProperty is not null)
+            {
+                return Expression.MakeMemberAccess(_newParameter, targetProperty);
+            }
+            
+            throw new Exception($"Member {node.Member.Name} is not definer on type {_newParameter.Type}");
+        }
+        
+        return base.VisitMember(node);
+    }
+    
 }
