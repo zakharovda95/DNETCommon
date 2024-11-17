@@ -1,4 +1,4 @@
-using DNETCommon.Infrastructure.Enums;
+using DNETCommon.Enums;
 
 namespace DNETCommon.Abstractions;
 

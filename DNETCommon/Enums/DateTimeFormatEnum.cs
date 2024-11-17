@@ -1,4 +1,4 @@
-namespace DNETCommon.Infrastructure.Enums;
+namespace DNETCommon.Enums;
 
 /// <summary>
 /// Перечисления формата даты и времени

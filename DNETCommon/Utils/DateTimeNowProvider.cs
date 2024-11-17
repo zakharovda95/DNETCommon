@@ -1,5 +1,5 @@
 using DNETCommon.Abstractions;
-using DNETCommon.Infrastructure.Enums;
+using DNETCommon.Enums;
 
 namespace DNETCommon.Utils;
 
