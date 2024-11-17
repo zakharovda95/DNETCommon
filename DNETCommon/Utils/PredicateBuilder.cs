@@ -5,7 +5,7 @@ using DNETCommon.Enums;
 namespace DNETCommon.Utils;
 
 /// <summary>
-/// Строитель предикатов для EntityFramework на основе [OutputSettings]
+/// Строитель предикатов
 /// </summary>
 public class PredicateBuilder<T> : IPredicateBuilder<T>
     where T : class
@@ -31,7 +31,11 @@ public class PredicateBuilder<T> : IPredicateBuilder<T>
         }
         
         // получаем цепочку доступа к параметру (например user.PersonalData.FirstName)
-        var parameterAccessChain = _getPropertyAccessChain(_parameter, properties);
+        var parameterAccessChain = _getPropertyAccessChain(properties);
+        if (parameterAccessChain.Type != typeof(string))
+        {
+            return this;
+        }
         
         // получаем выражение с проверкой цепочки на null parameterAccessChain != null
         var parameterAccessChainNotANull = Expression.NotEqual(parameterAccessChain, Expression.Constant(null));
@@ -80,13 +84,13 @@ public class PredicateBuilder<T> : IPredicateBuilder<T>
         // user => user.PersonalData.BirthDate >= даты-с && user.PersonalData.BirthDate <= даты-по
         // Вызов метода будет: AddDate(dateFrom, dateTo, ConditionEnum.None, "PersonalData", "BirthDate");
         
-        if ((dateFrom is null && dateTo is null) || (dateFrom <= DateTime.MinValue && dateTo <= DateTime.MinValue))
+        if (dateFrom is null && dateTo is null)
         {
             return this;
         }
 
         // создаем цепочку доступа (user.PersonalData.BirthDate)
-        var propertyAccessChain = _getPropertyAccessChain(_parameter, properties);
+        var propertyAccessChain = _getPropertyAccessChain(properties);
         if (propertyAccessChain.Type != typeof(DateTime))
         {
             return this;
@@ -162,16 +166,16 @@ public class PredicateBuilder<T> : IPredicateBuilder<T>
     /// <param name="parameter">Параметр выражения (В примере: user)</param>
     /// <param name="props">Цепочка свойств [В примере: PersonalInfo, FirstName]</param>
     /// <returns>Цепочка доступов (Например: user.PersonalInfo.FirstName)</returns>
-    private Expression _getPropertyAccessChain(ParameterExpression parameter, params string[] props)
+    private Expression _getPropertyAccessChain(params string[] props)
     {
         // если нет вложенных свойств - возвращаем сам параметр, будет обращение к нему (user)
         if (props is null || props.Length <= 0)
         {
-            return parameter;
+            return _parameter;
         }
         
         // первый шаг доступа (в примере user.PersonalData)
-        var propertyAccessChain = Expression.Property(parameter, props[0]);
+        var propertyAccessChain = Expression.Property(_parameter, props[0]);
 
         // если больше нет свойств - возвращаем (в примере: user.PersonalData)
         if (props.Length == 1) return propertyAccessChain;
